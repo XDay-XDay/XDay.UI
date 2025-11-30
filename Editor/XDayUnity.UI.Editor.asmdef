@@ -1,0 +1,26 @@
+{
+    "name": "XDayUnity.UI.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:57db19fe6bd20ff459ebdad159e02be2",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:5a35fcf9b1426244eba15a417b8fc435",
+        "GUID:8c65b8a09f93e5e4895ec638d2474679",
+        "GUID:59cd6c29b39ffd44f97434f427d6e311",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:6546d7765b4165b40850b3667f981c26",
+        "GUID:e99e59c156d662146b8fca14ee7648eb",
+        "GUID:6dd05563c910b3845b95134b2cb91194"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
