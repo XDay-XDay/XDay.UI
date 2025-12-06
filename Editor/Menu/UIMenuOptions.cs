@@ -475,6 +475,27 @@ namespace XDay.GUIAPI.Editor
 
         private static void CreateEventSystem(bool select, GameObject parent)
         {
+#if ENABLE_TUANJIE
+            StageHandle stage = parent == null ? StageUtility.GetCurrentStageHandle() : StageUtility.GetStageHandle(parent);
+            var esys = stage.FindComponentOfType<EventSystem>();
+            if (esys == null)
+            {
+                var eventSystem = ObjectFactory.CreateGameObject("EventSystem");
+                if (parent == null)
+                    StageUtility.PlaceGameObjectInCurrentStage(eventSystem);
+                else
+                    SetParentAndAlign(eventSystem, parent);
+                esys = ObjectFactory.AddComponent<EventSystem>(eventSystem);
+                ObjectFactory.AddComponent<StandaloneInputModule>(eventSystem);
+
+                Undo.RegisterCreatedObjectUndo(eventSystem, "Create " + eventSystem.name);
+            }
+
+            if (select && esys != null)
+            {
+                Selection.activeGameObject = esys.gameObject;
+            }
+#else
             StageHandle stage = parent == null ? StageUtility.GetCurrentStageHandle() : StageUtility.GetStageHandle(parent);
             var esys = stage.FindComponentOfType<UnityEngine.EventSystems.EventSystem>();
             if (esys == null)
@@ -494,6 +515,7 @@ namespace XDay.GUIAPI.Editor
             {
                 Selection.activeGameObject = esys.gameObject;
             }
+#endif
         }
 
         // Helper function that returns a Canvas GameObject; preferably a parent of the selection, or other existing Canvas.
