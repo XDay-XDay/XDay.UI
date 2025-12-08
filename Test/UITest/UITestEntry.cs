@@ -44,7 +44,7 @@ public class UITestEntry : MonoBehaviour
 {
     void Start()
     {
-        m_Loader = new GameAssetLoader();
+        m_Loader = new XDay.WorldAPI.EditorWorldAssetLoader();
 
         m_UIManager = IUIWindowManager.Create(m_Loader, new GameObject("UI Root"));
 
@@ -82,7 +82,7 @@ public class UITestEntry : MonoBehaviour
         });
     }
 
-    private GameAssetLoader m_Loader;
+    private XDay.WorldAPI.EditorWorldAssetLoader m_Loader;
     private IUIWindowManager m_UIManager;
     private UIWindowBase m_TestUIWindow;
 }

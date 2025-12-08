@@ -23,7 +23,7 @@
 
 using System;
 using UnityEngine;
-using XDay.AssetAPI;
+using XDay.WorldAPI;
 
 namespace XDay.GUIAPI
 {
@@ -33,8 +33,8 @@ namespace XDay.GUIAPI
         public virtual bool Updatable => false;
         public abstract bool IsLoaded { get; }
 
-        public abstract void LoadAsync(IAssetLoader loader, bool showWhenLoaded, GameObject uiRoot);
-        public abstract void Load(IAssetLoader loader, bool showWhenLoaded, GameObject uiRoot);
+        public abstract void LoadAsync(IWorldAssetLoader loader, bool showWhenLoaded, GameObject uiRoot);
+        public abstract void Load(IWorldAssetLoader loader, bool showWhenLoaded, GameObject uiRoot);
         public abstract void OnDestroy();
         public abstract void SetData(object data);
         public abstract object GetData();
@@ -66,7 +66,7 @@ namespace XDay.GUIAPI
             m_IsLoading = false;
         }
 
-        public override void Load(IAssetLoader loader, bool showWhenLoaded, GameObject uiRoot)
+        public override void Load(IWorldAssetLoader loader, bool showWhenLoaded, GameObject uiRoot)
         {
             m_IsLoading = true;
             var gameObject = loader.LoadGameObject(m_View.GetPath());
@@ -75,7 +75,7 @@ namespace XDay.GUIAPI
             OnLoaded(gameObject, showWhenLoaded);
         }
 
-        public override void LoadAsync(IAssetLoader loader, bool showWhenLoaded, GameObject uiRoot)
+        public override void LoadAsync(IWorldAssetLoader loader, bool showWhenLoaded, GameObject uiRoot)
         {
             m_IsLoading = true;
             loader.LoadGameObjectAsync(m_View.GetPath(), (gameObject) =>

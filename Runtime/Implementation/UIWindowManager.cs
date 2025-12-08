@@ -23,17 +23,17 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using XDay.AssetAPI;
 using XDay.UtilityAPI;
+using XDay.WorldAPI;
 
 namespace XDay.GUIAPI
 {
     internal class UIWindowManager : IUIWindowManager
     {
         public static UIWindowManager Instance => m_Instance;
-        public IAssetLoader AssetLoader => m_Loader;
+        public IWorldAssetLoader AssetLoader => m_Loader;
 
-        public UIWindowManager(IAssetLoader loader, GameObject windowRoot)
+        public UIWindowManager(IWorldAssetLoader loader, GameObject windowRoot)
         {
             if (m_Instance != null)
             {
@@ -177,7 +177,7 @@ namespace XDay.GUIAPI
             return null;
         }
 
-        private readonly IAssetLoader m_Loader;
+        private readonly IWorldAssetLoader m_Loader;
         private readonly List<UIWindowBase> m_ActiveWindows = new();
         private readonly List<UIWindowBase> m_UpdatableActiveWindows = new();
         private readonly List<UIWindowBase> m_CachedWindows = new();

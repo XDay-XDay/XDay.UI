@@ -1,0 +1,26 @@
+{
+    "name": "XDayUnity.UI.Test",
+    "rootNamespace": "",
+    "references": [
+        "XDayUnity.Editor",
+        "XDayUnity",
+        "UniTask",
+        "Unity.TextMeshPro",
+        "BEPUphysics",
+        "FixedMath",
+        "XDay",
+        "XDayUnity.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "XDay.dll",
+        "ZString.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -22,7 +22,7 @@
  */
 
 using UnityEngine;
-using XDay.AssetAPI;
+using XDay.WorldAPI;
 
 namespace XDay.GUIAPI
 {
@@ -37,7 +37,7 @@ namespace XDay.GUIAPI
 
     public interface IUIWindowManager
     {
-        static IUIWindowManager Create(IAssetLoader loader, GameObject windowRoot)
+        static IUIWindowManager Create(IWorldAssetLoader loader, GameObject windowRoot)
         {
             return new UIWindowManager(loader, windowRoot);
         }
