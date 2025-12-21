@@ -231,7 +231,7 @@ namespace XDay.GUIAPI.Editor
 
         // Graphic elements
 
-        [MenuItem("GameObject/XDay/UI/Image", false, (int)MenuOptionsPriorityOrder.Image)]
+        [MenuItem("GameObject/XDay/UI/XDay Image", false, (int)MenuOptionsPriorityOrder.Image)]
         static public void AddImage(MenuCommand menuCommand)
         {
             GameObject go;
@@ -241,7 +241,7 @@ namespace XDay.GUIAPI.Editor
             PlaceUIElementRoot(go, menuCommand);
         }
 
-        [MenuItem("GameObject/XDay/UI/Raw Image", false, (int)MenuOptionsPriorityOrder.RawImage)]
+        [MenuItem("GameObject/XDay/UI/XDay Raw Image", false, (int)MenuOptionsPriorityOrder.RawImage)]
         static public void AddRawImage(MenuCommand menuCommand)
         {
             GameObject go;
@@ -251,7 +251,7 @@ namespace XDay.GUIAPI.Editor
             PlaceUIElementRoot(go, menuCommand);
         }
 
-        [MenuItem("GameObject/XDay/UI/Panel", false, (int)MenuOptionsPriorityOrder.Panel)]
+        [MenuItem("GameObject/XDay/UI/XDay Panel", false, (int)MenuOptionsPriorityOrder.Panel)]
         static public void AddPanel(MenuCommand menuCommand)
         {
             GameObject go;
@@ -269,7 +269,7 @@ namespace XDay.GUIAPI.Editor
 
         // Toggle is a control you just click on.
 
-        [MenuItem("GameObject/XDay/UI/Toggle", false, (int)MenuOptionsPriorityOrder.Toggle)]
+        [MenuItem("GameObject/XDay/UI/XDay Toggle", false, (int)MenuOptionsPriorityOrder.Toggle)]
         static public void AddToggle(MenuCommand menuCommand)
         {
             GameObject go;
@@ -280,7 +280,7 @@ namespace XDay.GUIAPI.Editor
 
         // Slider and Scrollbar modify a number
 
-        [MenuItem("GameObject/XDay/UI/Slider", false, (int)MenuOptionsPriorityOrder.Slider)]
+        [MenuItem("GameObject/XDay/UI/XDay Slider", false, (int)MenuOptionsPriorityOrder.Slider)]
         static public void AddSlider(MenuCommand menuCommand)
         {
             GameObject go;
@@ -289,7 +289,7 @@ namespace XDay.GUIAPI.Editor
             PlaceUIElementRoot(go, menuCommand);
         }
 
-        [MenuItem("GameObject/XDay/UI/Scrollbar", false, (int)MenuOptionsPriorityOrder.Scrollbar)]
+        [MenuItem("GameObject/XDay/UI/XDay Scrollbar", false, (int)MenuOptionsPriorityOrder.Scrollbar)]
         static public void AddScrollbar(MenuCommand menuCommand)
         {
             GameObject go;
@@ -298,7 +298,7 @@ namespace XDay.GUIAPI.Editor
             PlaceUIElementRoot(go, menuCommand);
         }
 
-        [MenuItem("GameObject/XDay/UI/Scroll View", false, (int)MenuOptionsPriorityOrder.ScrollView)]
+        [MenuItem("GameObject/XDay/UI/XDay Scroll View", false, (int)MenuOptionsPriorityOrder.ScrollView)]
         static public void AddScrollView(MenuCommand menuCommand)
         {
             GameObject go;
@@ -310,7 +310,7 @@ namespace XDay.GUIAPI.Editor
 
         // Containers
 
-        [MenuItem("GameObject/XDay/UI/Canvas", false, (int)MenuOptionsPriorityOrder.Canvas)]
+        [MenuItem("GameObject/XDay/UI/XDay Canvas", false, (int)MenuOptionsPriorityOrder.Canvas)]
         static public void AddCanvas(MenuCommand menuCommand)
         {
             var go = CreateNewUI();
@@ -328,7 +328,7 @@ namespace XDay.GUIAPI.Editor
 
         // Legacy Elements
 
-        [MenuItem("GameObject/XDay/UI/Legacy/Text", false, (int)MenuOptionsPriorityOrder.Text)]
+        [MenuItem("GameObject/XDay/UI/Legacy/XDay Text", false, (int)MenuOptionsPriorityOrder.Text)]
         static public void AddText(MenuCommand menuCommand)
         {
             GameObject go;
@@ -337,7 +337,7 @@ namespace XDay.GUIAPI.Editor
             PlaceUIElementRoot(go, menuCommand);
         }
 
-        [MenuItem("GameObject/XDay/UI/Legacy/Button", false, (int)MenuOptionsPriorityOrder.Button)]
+        [MenuItem("GameObject/XDay/UI/Legacy/XDay Button", false, (int)MenuOptionsPriorityOrder.Button)]
         static public void AddButton(MenuCommand menuCommand)
         {
             GameObject go;
@@ -346,7 +346,7 @@ namespace XDay.GUIAPI.Editor
             PlaceUIElementRoot(go, menuCommand);
         }
 
-        [MenuItem("GameObject/XDay/UI/Legacy/Dropdown", false, (int)MenuOptionsPriorityOrder.Dropdown)]
+        [MenuItem("GameObject/XDay/UI/Legacy/XDay Dropdown", false, (int)MenuOptionsPriorityOrder.Dropdown)]
         static public void AddDropdown(MenuCommand menuCommand)
         {
             GameObject go;
@@ -355,7 +355,7 @@ namespace XDay.GUIAPI.Editor
             PlaceUIElementRoot(go, menuCommand);
         }
 
-        [MenuItem("GameObject/XDay/UI/Legacy/Input Field", false, (int)MenuOptionsPriorityOrder.InputField)]
+        [MenuItem("GameObject/XDay/UI/Legacy/XDay Input Field", false, (int)MenuOptionsPriorityOrder.InputField)]
         public static void AddInputField(MenuCommand menuCommand)
         {
             GameObject go;
@@ -364,7 +364,7 @@ namespace XDay.GUIAPI.Editor
             PlaceUIElementRoot(go, menuCommand);
         }
 
-        [MenuItem("GameObject/XDay/UI/Empty Image", false, (int)MenuOptionsPriorityOrder.EmptyImage)]
+        [MenuItem("GameObject/XDay/UI/XDay Empty Image", false, (int)MenuOptionsPriorityOrder.EmptyImage)]
         public static void AddEmptyImage(MenuCommand menuCommand)
         {
             GameObject go;
@@ -382,7 +382,7 @@ namespace XDay.GUIAPI.Editor
         /// Create a TextMeshPro object that works with the CanvasRenderer
         /// </summary>
         /// <param name="command"></param>
-        [MenuItem("GameObject/XDay/UI/Text - TextMeshPro", false, 2001)]
+        [MenuItem("GameObject/XDay/UI/XDay Text - TextMeshPro", false, 2001)]
         static void CreateTextMeshProGuiObjectPerform(MenuCommand menuCommand)
         {
             GameObject go = TMP_DefaultControls.CreateText(GetTMPStandardResources());
@@ -461,7 +461,7 @@ namespace XDay.GUIAPI.Editor
             return root;
         }
 
-        [MenuItem("GameObject/XDay/UI/Event System", false, (int)MenuOptionsPriorityOrder.EventSystem)]
+        [MenuItem("GameObject/XDay/UI/XDay Event System", false, (int)MenuOptionsPriorityOrder.EventSystem)]
         public static void CreateEventSystem(MenuCommand menuCommand)
         {
             GameObject parent = menuCommand.context as GameObject;

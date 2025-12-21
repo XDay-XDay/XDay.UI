@@ -26,7 +26,7 @@ using UnityEngine.UI;
 
 namespace XDay.GUIAPI
 {
-    [AddComponentMenu("XDay/UI/Text", 0)]
+    [AddComponentMenu("XDay/UI/XDay Text", 0)]
     public class UIText : Text
     {
     }

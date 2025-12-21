@@ -26,7 +26,7 @@ using UnityEngine.UI;
 
 namespace XDay.GUIAPI
 {
-    [AddComponentMenu("XDay/UI/Empty Image", 0)]
+    [AddComponentMenu("XDay/UI/XDay Empty Image", 0)]
     public class UIEmptyImage : Image
     {
         protected override void OnPopulateMesh(VertexHelper vh)

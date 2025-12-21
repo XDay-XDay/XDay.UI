@@ -30,7 +30,7 @@ namespace XDay.GUIAPI
     /// <summary>
     /// 向下继续传递消息
     /// </summary>
-    [AddComponentMenu("XDay/UI/Event Pass", 0)]
+    [AddComponentMenu("XDay/UI/XDay Event Pass", 0)]
     public class UIEventPass : MonoBehaviour,
         IPointerClickHandler,
         IPointerDownHandler,

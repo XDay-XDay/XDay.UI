@@ -29,10 +29,10 @@ namespace XDay.GUIAPI
     {
         public string Name => m_Name;
 
-        public DynamicAtlasSet(string name)
+        public DynamicAtlasSet(string name, DynamicAtlasGroup size)
         {
             m_Name = name;
-            GetDynamicAtlas(DynamicAtlasGroup.Size_2048, name);
+            GetDynamicAtlas(size, name);
         }
 
         public void OnDestroy()

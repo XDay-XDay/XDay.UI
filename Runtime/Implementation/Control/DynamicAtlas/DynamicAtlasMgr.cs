@@ -26,102 +26,28 @@ using UnityEngine;
 
 namespace XDay.GUIAPI
 {
-    internal class DynamicAtlasMgr : Singleton<DynamicAtlasMgr>
+    public class DynamicAtlasMgr : Singleton<DynamicAtlasMgr>
     {
         public bool Pause { get; internal set; } = false;
-        internal Texture2D ClearTexture => m_ClearTexture;
 
-        [RuntimeInitializeOnLoadMethod]
-        private static void RuntimeInit()
-        {
-            S.Init();
-        }
-
-        private void Init()
+        public void Init(Texture2D clearTexture)
         {
             ClearAllCache();
 
-            m_SetPool.Add(new DynamicAtlasSet("Set 0"));
-            m_SetPool.Add(new DynamicAtlasSet("Set 1"));
-            m_SetPool.Add(new DynamicAtlasSet("Set 2"));
+            var size = DynamicAtlasGroup.Size_2048;
+
+            m_SetPool.Add(new DynamicAtlasSet("Set 0", size));
+            m_SetPool.Add(new DynamicAtlasSet("Set 1", size));
+            m_SetPool.Add(new DynamicAtlasSet("Set 2", size));
 
             m_Empty = new("DynamicAtlasMgr");
             m_Empty.AddComponent<DynamicAtlasMgrBehaviour>();
 
-            var config = Object.FindAnyObjectByType<DynamicAtlasConfig>();
-            if (config == null)
-            {
-                Log.Instance?.Error($"DynamicAtlasConfig not created!");
-            }
-            else
-            {
-                m_ClearTexture = config.ClearTexture;
-                Log.Instance?.Assert(m_ClearTexture != null, $"Clear texture not set!");
-            }
+            m_ClearTexture = clearTexture;
+            Log.Instance?.Assert(m_ClearTexture != null, $"Clear texture not set!");
         }
 
-        public void AddToQueue(UIImage image)
-        {
-            m_Queue.Add(image);
-        }
-
-        public void RemoveFromQueue(UIImage image)
-        {
-            m_Queue.Remove(image);
-        }
-
-        public DynamicAtlas GetDynamicAtlas(DynamicAtlasController atlas, DynamicAtlasGroup group)
-        {
-            Debug.Assert(atlas != null);
-
-            var set = GetSet(atlas);
-            if (set == null)
-            {
-                if (m_SetPool.Count == 0)
-                {
-                    set = new DynamicAtlasSet($"Set {++m_SetIndex}");
-                }
-                else
-                {
-                    set = m_SetPool[^1];
-                    m_SetPool.RemoveAt(m_SetPool.Count - 1);
-                }
-                m_Sets[atlas] = set;
-            }
-            return set.GetDynamicAtlas(group, "");
-        }
-
-        public SaveTextureData AllocateSaveTextureData()
-        {
-            if (m_SaveTextureDataList.Count > 0)
-            {
-                return m_SaveTextureDataList.Pop();
-            }
-            SaveTextureData data = new SaveTextureData();
-            return data;
-        }
-
-        public void ReleaseSaveTextureData(SaveTextureData data)
-        {
-            m_SaveTextureDataList.Add(data);
-        }
-
-        public GetTextureData AllocateGetTextureData()
-        {
-            if (m_GetTextureDataList.Count > 0)
-            {
-                return m_GetTextureDataList.Pop();
-            }
-            GetTextureData data = new GetTextureData();
-            return data;
-        }
-
-        public void ReleaseGetTextureData(GetTextureData data)
-        {
-            m_GetTextureDataList.Add(data);
-        }
-		
-        public void ClearSet(DynamicAtlasController atlas)
+        internal void ClearSet(DynamicAtlasController atlas)
         {
             Debug.Assert(atlas != null);
 
@@ -140,7 +66,7 @@ namespace XDay.GUIAPI
             }
         }
 
-        public void ClearAllCache()
+        internal void ClearAllCache()
         {
             foreach (var kv in m_Sets)
             {
@@ -158,6 +84,67 @@ namespace XDay.GUIAPI
             m_SaveTextureDataList.Clear();
         }
 
+        internal void AddToQueue(UIImage image)
+        {
+            m_Queue.Add(image);
+        }
+
+        internal void RemoveFromQueue(UIImage image)
+        {
+            m_Queue.Remove(image);
+        }
+
+        internal DynamicAtlas GetDynamicAtlas(DynamicAtlasController atlas, DynamicAtlasGroup group)
+        {
+            Debug.Assert(atlas != null);
+
+            var set = GetSet(atlas);
+            if (set == null)
+            {
+                if (m_SetPool.Count == 0)
+                {
+                    set = new DynamicAtlasSet($"Set {++m_SetIndex}", group);
+                }
+                else
+                {
+                    set = m_SetPool[^1];
+                    m_SetPool.RemoveAt(m_SetPool.Count - 1);
+                }
+                m_Sets[atlas] = set;
+            }
+            return set.GetDynamicAtlas(group, "");
+        }
+
+        internal SaveTextureData AllocateSaveTextureData()
+        {
+            if (m_SaveTextureDataList.Count > 0)
+            {
+                return m_SaveTextureDataList.Pop();
+            }
+            SaveTextureData data = new SaveTextureData();
+            return data;
+        }
+
+        internal void ReleaseSaveTextureData(SaveTextureData data)
+        {
+            m_SaveTextureDataList.Add(data);
+        }
+
+        internal GetTextureData AllocateGetTextureData()
+        {
+            if (m_GetTextureDataList.Count > 0)
+            {
+                return m_GetTextureDataList.Pop();
+            }
+            GetTextureData data = new GetTextureData();
+            return data;
+        }
+
+        internal void ReleaseGetTextureData(GetTextureData data)
+        {
+            m_GetTextureDataList.Add(data);
+        }
+
         private DynamicAtlasSet GetSet(DynamicAtlasController atlas)
         {
             m_Sets.TryGetValue(atlas, out var set);
@@ -170,6 +157,7 @@ namespace XDay.GUIAPI
         }
 
         internal Dictionary<DynamicAtlasController, DynamicAtlasSet> Sets => m_Sets;
+        internal Texture2D ClearTexture => m_ClearTexture;
 
         private readonly Dictionary<DynamicAtlasController, DynamicAtlasSet> m_Sets = new();
         private readonly List<DynamicAtlasSet> m_SetPool = new();

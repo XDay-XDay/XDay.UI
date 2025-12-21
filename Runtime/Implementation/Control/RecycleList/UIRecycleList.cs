@@ -39,7 +39,7 @@ namespace XDay.GUIAPI
     ///     1.优化滚动时视野检查
     ///     2.自动计算Padding排版
     /// </summary>
-    [AddComponentMenu("XDay/UI/Recycle List", 0)]
+    [AddComponentMenu("XDay/UI/XDay Recycle List", 0)]
     public class UIRecycleList : MonoBehaviour
     {
         public GameObject ListItemPrefab;

@@ -47,7 +47,7 @@ namespace XDay.GUIAPI
             m_Spacing = spacing;
             m_ListItemPrefab = item;
             m_ScrollRect = scrollRect;
-            m_ItemSize = GetItemSize();
+            m_ItemSize = GetItemSize(item.transform.localScale);
             m_ItemPivot = (m_ListItemPrefab.transform as RectTransform).pivot;
             m_ListItemPrefab.SetActive(false);
             m_ScrollRect.onValueChanged.AddListener(OnScrollValueChanged);
@@ -72,6 +72,9 @@ namespace XDay.GUIAPI
             where View : UIView
             where Controller : UIControllerBase
         {
+            //todo reuse view
+            Clear();
+
             m_DataList = new(datas);
             m_ViewType = typeof(View);
             m_ControllerType = typeof(Controller);
@@ -87,7 +90,7 @@ namespace XDay.GUIAPI
                 itemView.OnDestroy();
             }
             m_ItemViews.Clear();
-            m_DataList.Clear();
+            m_DataList?.Clear();
             m_ItemCoordinates.Clear();
             m_LastScrollPosition = Vector2.zero;
             m_ViewType = null;
@@ -174,9 +177,10 @@ namespace XDay.GUIAPI
             return new Vector2(pos.x - m_ContentRect.width * 0.5f, m_ContentRect.height - pos.y - m_ContentRect.height * 0.5f);
         }
 
-        private Vector2 GetItemSize()
+        private Vector2 GetItemSize(Vector3 scale)
         {
-            return (m_ListItemPrefab.transform as RectTransform).rect.size;
+            var itemSize = (m_ListItemPrefab.transform as RectTransform).rect.size;
+            return new Vector2(itemSize.x * scale.x, itemSize.y * scale.y);
         }
 
         /// <summary>

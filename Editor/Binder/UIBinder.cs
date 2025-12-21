@@ -307,8 +307,7 @@ namespace XDay.GUIAPI.Editor
         {
             bool deleted = false;
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField($"{index}-{metadata.Type}");
-            metadata.HandlerName = EditorGUILayout.TextField("", metadata.HandlerName);
+            EditorGUILayout.LabelField($"{index}-{metadata.Type}:");
             if (GUILayout.Button("X", GUILayout.MaxWidth(20)))
             {
                 if (EditorUtility.DisplayDialog("Warning", "Continue?", "Yes", "No"))
@@ -317,6 +316,10 @@ namespace XDay.GUIAPI.Editor
                 }
             }
             EditorGUILayout.EndHorizontal();
+            EditorGUI.indentLevel++;
+            metadata.HandlerName = EditorGUILayout.TextField("Name", metadata.HandlerName);
+            metadata.DisplayKeyID = EditorGUILayout.IntField("DisplayKeyID", metadata.DisplayKeyID);
+            EditorGUI.indentLevel--;
             return deleted;
         }
 
@@ -533,11 +536,14 @@ namespace XDay.GUIAPI.Editor
 
         private void RemoveBinding()
         {
-            m_MetadataManager.UIMetadatas.Remove(m_Metadata);
-            m_Metadata = null;
-            Clear();
-            EditorUtility.SetDirty(m_MetadataManager);
-            AssetDatabase.SaveAssets();
+            if (EditorUtility.DisplayDialog("Warning", "Are you sure?", "Yes", "No"))
+            {
+                m_MetadataManager.UIMetadatas.Remove(m_Metadata);
+                m_Metadata = null;
+                Clear();
+                EditorUtility.SetDirty(m_MetadataManager);
+                AssetDatabase.SaveAssets();
+            }
         }
 
         private UIBinderConfig m_Config;

@@ -254,7 +254,7 @@ namespace XDay.GUIAPI
 
         private bool m_Visible = false;
         private GameObject m_Root;
-        private List<UIView> m_Subviews = new();
+        private readonly List<UIView> m_Subviews = new();
         protected UIControllerBase m_Controller;
         protected Canvas m_Canvas;
     }

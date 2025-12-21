@@ -28,7 +28,7 @@ using UnityEngine.EventSystems;
 
 namespace XDay.GUIAPI
 {
-    [AddComponentMenu("XDay/UI/Event Listener", 0)]
+    [AddComponentMenu("XDay/UI/XDay Event Listener", 0)]
     public class UIEventListener : MonoBehaviour, 
         IPointerClickHandler,
         IPointerDownHandler,

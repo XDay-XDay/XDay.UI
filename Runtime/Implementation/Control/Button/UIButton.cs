@@ -26,7 +26,7 @@ using UnityEngine.UI;
 
 namespace XDay.GUIAPI
 {
-    [AddComponentMenu("XDay/UI/Button", 0)]
+    [AddComponentMenu("XDay/UI/XDay Button", 0)]
     public class UIButton : Button
     {
     }

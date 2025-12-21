@@ -26,7 +26,7 @@ using UnityEngine;
 
 namespace XDay.GUIAPI
 {
-    [AddComponentMenu("XDay/UI/TextMeshPro", 0)]
+    [AddComponentMenu("XDay/UI/XDay TextMeshPro", 0)]
     public class TextMeshPro3D : TMPro.TextMeshPro
     {
         public float UnderlayDilate;

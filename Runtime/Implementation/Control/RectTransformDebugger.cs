@@ -26,7 +26,7 @@ using UnityEngine.UI;
 
 namespace XDay.UtilityAPI
 {
-    [AddComponentMenu("XDay/UI/Rect Transform Debugger", 0)]
+    [AddComponentMenu("XDay/UI/XDay Rect Transform Debugger", 0)]
     public class RectTransformDebugger : MonoBehaviour
     {
         public Rect Rect;

@@ -30,7 +30,7 @@ namespace XDay.GUIAPI
     /// <summary>
     /// 需要借助Layout组件自动排列List元素
     /// </summary>
-    [AddComponentMenu("XDay/UI/List", 0)]
+    [AddComponentMenu("XDay/UI/XDay List", 0)]
     public class UIList : MonoBehaviour
     {
         public GameObject ListItemPrefab;

@@ -52,6 +52,7 @@ namespace XDay.GUIAPI
     {
         public UIEventType Type;
         public string HandlerName;
+        public int DisplayKeyID;
     }
 
     [Serializable]

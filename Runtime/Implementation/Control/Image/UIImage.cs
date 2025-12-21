@@ -27,7 +27,7 @@ using XDay.DisplayKeyAPI;
 
 namespace XDay.GUIAPI
 {
-    [AddComponentMenu("XDay/UI/Image", 0)]
+    [AddComponentMenu("XDay/UI/XDay Image", 0)]
     public class UIImage : Image
     {
         public bool EnableDynamicAtlas

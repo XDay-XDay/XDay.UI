@@ -81,5 +81,38 @@ namespace XDay.GUIAPI
                 coverUI.sizeDelta = size;
             }
         }
+
+        public static Canvas GetFirstCanvas(GameObject obj)
+        {
+            var trans = obj.transform;
+            while (trans != null)
+            {
+                if (trans.TryGetComponent<Canvas>(out var canvas))
+                {
+                    return canvas;
+                }
+                trans = trans.parent;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// ui world position是canvas空间的坐标
+        /// </summary>
+        /// <param name="screenPosition"></param>
+        /// <param name="canvas"></param>
+        /// <returns></returns>
+        public static Vector3 ScreenToUIWorldPosition(Vector2 screenPosition, Canvas canvas)
+        {
+            RectTransformUtility.ScreenPointToWorldPointInRectangle(canvas.transform as RectTransform, screenPosition, null, out var worldPos);
+            return worldPos;
+        }
+
+        public static Vector3 WorldToUIWorldPosition(Vector3 worldPos, Canvas canvas, Camera camera)
+        {
+            var screenPos = RectTransformUtility.WorldToScreenPoint(camera, worldPos);
+            RectTransformUtility.ScreenPointToWorldPointInRectangle(canvas.transform as RectTransform, screenPos, null, out var canvasPos);
+            return canvasPos;
+        }
     }
 }

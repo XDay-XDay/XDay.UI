@@ -26,7 +26,7 @@ using UnityEngine.UI;
 
 namespace XDay.GUIAPI
 {
-    [AddComponentMenu("XDay/UI/RawImage", 0)]
+    [AddComponentMenu("XDay/UI/XDay RawImage", 0)]
     public class UIRawImage : RawImage
     {
     }

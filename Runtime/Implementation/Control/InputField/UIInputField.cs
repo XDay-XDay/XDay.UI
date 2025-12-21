@@ -26,7 +26,7 @@ using UnityEngine.UI;
 
 namespace XDay.GUIAPI
 {
-    [AddComponentMenu("XDay/UI/Input Field", 0)]
+    [AddComponentMenu("XDay/UI/XDay Input Field", 0)]
     public class UIInputField : InputField
     {
     }
