@@ -27,18 +27,6 @@ using System.Collections.Generic;
 
 namespace XDay.GUIAPI
 {
-    public enum UIEventType
-    {
-        Click,
-        Down,
-        Up,
-        Enter,
-        Exit,
-        Drag,
-        BeginDrag,
-        EndDrag,
-    }
-
     [Serializable]
     public class UIComponentMetadata
     {

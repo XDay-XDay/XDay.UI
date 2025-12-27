@@ -93,7 +93,11 @@ namespace XDay.GUIAPI
             }
             return 4;
 #else
+#if UNITY_OPENHARMONY || UNITY_OPENHARMONY_API
+            return 4;
+#else
             return 6;
+#endif
 #endif
         }
     }

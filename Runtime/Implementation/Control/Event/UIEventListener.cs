@@ -24,10 +24,23 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace XDay.GUIAPI
 {
+    public enum UIEventType
+    {
+        Click,
+        Down,
+        Up,
+        Enter,
+        Exit,
+        Drag,
+        BeginDrag,
+        EndDrag,
+    }
+
     [AddComponentMenu("XDay/UI/XDay Event Listener", 0)]
     public class UIEventListener : MonoBehaviour, 
         IPointerClickHandler,
@@ -39,133 +52,183 @@ namespace XDay.GUIAPI
         IBeginDragHandler,
         IEndDragHandler
     {
+        public static event UnityAction<GameObject, UIEventType, int> OnUIEvent;
+
         public void OnPointerClick(PointerEventData eventData)
         {
-            m_OnClick?.Invoke(eventData);
+            Trigger(m_OnClick, eventData, UIEventType.Click);
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            m_OnDown?.Invoke(eventData);
+            Trigger(m_OnDown, eventData, UIEventType.Down);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            m_OnEnter?.Invoke(eventData);
+            Trigger(m_OnEnter, eventData, UIEventType.Enter);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            m_OnExit?.Invoke(eventData);
+            Trigger(m_OnExit, eventData, UIEventType.Exit);
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            m_OnUp?.Invoke(eventData);
+            Trigger(m_OnUp, eventData, UIEventType.Up);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            m_OnDrag?.Invoke(eventData);
+            Trigger(m_OnDrag, eventData, UIEventType.Drag);
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            m_OnBeginDrag?.Invoke(eventData);
+            Trigger(m_OnBeginDrag, eventData, UIEventType.BeginDrag);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            m_OnEndDrag?.Invoke(eventData);
+            Trigger(m_OnEndDrag, eventData, UIEventType.EndDrag);
         }
 
-        public void AddClickEvent(Action<PointerEventData> handler)
+        public void AddClickEvent(UnityAction<PointerEventData> handler, int displayKey = 0)
         {
-            m_OnClick += handler;
+            m_OnClick ??= new(displayKey);
+            m_OnClick.AddHandler(handler);
         }
 
-        public void RemoveClickEvent(Action<PointerEventData> handler)
+        public void RemoveClickEvent(UnityAction<PointerEventData> handler)
         {
-            m_OnClick -= handler;
+            m_OnClick?.RemoveHandler(handler);
         }
 
-        public void AddUpEvent(Action<PointerEventData> handler)
+        public void AddUpEvent(UnityAction<PointerEventData> handler, int displayKey = 0)
         {
-            m_OnUp += handler;
+            m_OnUp ??= new(displayKey);
+            m_OnUp.AddHandler(handler);
         }
 
-        public void RemoveUpEvent(Action<PointerEventData> handler)
+        public void RemoveUpEvent(UnityAction<PointerEventData> handler)
         {
-            m_OnUp -= handler;
+            m_OnUp?.RemoveHandler(handler);
         }
 
-        public void AddDownEvent(Action<PointerEventData> handler)
+        public void AddDownEvent(UnityAction<PointerEventData> handler, int displayKey = 0)
         {
-            m_OnDown += handler;
+            m_OnDown ??= new(displayKey);
+            m_OnDown.AddHandler(handler);
         }
 
-        public void RemoveDownEvent(Action<PointerEventData> handler)
+        public void RemoveDownEvent(UnityAction<PointerEventData> handler)
         {
-            m_OnDown -= handler;
+            m_OnDown?.RemoveHandler(handler);
         }
 
-        public void AddEnterEvent(Action<PointerEventData> handler)
+        public void AddEnterEvent(UnityAction<PointerEventData> handler, int displayKey = 0)
         {
-            m_OnEnter += handler;
+            m_OnEnter ??= new(displayKey);
+            m_OnEnter.AddHandler(handler);
         }
 
-        public void RemoveEnterEvent(Action<PointerEventData> handler)
+        public void RemoveEnterEvent(UnityAction<PointerEventData> handler)
         {
-            m_OnEnter -= handler;
+            m_OnEnter?.RemoveHandler(handler);
         }
 
-        public void AddExitEvent(Action<PointerEventData> handler)
+        public void AddExitEvent(UnityAction<PointerEventData> handler, int displayKey = 0)
         {
-            m_OnExit += handler;
+            m_OnExit ??= new(displayKey);
+            m_OnExit.AddHandler(handler);
         }
 
-        public void RemoveExitEvent(Action<PointerEventData> handler)
+        public void RemoveExitEvent(UnityAction<PointerEventData> handler)
         {
-            m_OnExit -= handler;
+            m_OnExit?.RemoveHandler(handler);
         }
 
-        public void AddDragEvent(Action<PointerEventData> handler)
+        public void AddDragEvent(UnityAction<PointerEventData> handler, int displayKey = 0)
         {
-            m_OnDrag += handler;
+            m_OnDrag ??= new(displayKey);
+            m_OnDrag.AddHandler(handler);
         }
 
-        public void RemoveDragEvent(Action<PointerEventData> handler)
+        public void RemoveDragEvent(UnityAction<PointerEventData> handler)
         {
-            m_OnDrag -= handler;
+            m_OnDrag?.RemoveHandler(handler);
         }
 
-        public void AddBeginDragEvent(Action<PointerEventData> handler)
+        public void AddBeginDragEvent(UnityAction<PointerEventData> handler, int displayKey = 0)
         {
-            m_OnBeginDrag += handler;
+            m_OnBeginDrag ??= new(displayKey);
+            m_OnBeginDrag.AddHandler(handler);
         }
 
-        public void RemoveBeginDragEvent(Action<PointerEventData> handler)
+        public void RemoveBeginDragEvent(UnityAction<PointerEventData> handler)
         {
-            m_OnBeginDrag -= handler;
+            m_OnBeginDrag?.RemoveHandler(handler);
         }
 
-        public void AddEndDragEvent(Action<PointerEventData> handler)
+        public void AddEndDragEvent(UnityAction<PointerEventData> handler, int displayKey = 0)
         {
-            m_OnEndDrag += handler;
+            m_OnEndDrag ??= new(displayKey);
+            m_OnEndDrag.AddHandler(handler);
         }
 
-        public void RemoveEndDragEvent(Action<PointerEventData> handler)
+        public void RemoveEndDragEvent(UnityAction<PointerEventData> handler)
         {
-            m_OnEndDrag -= handler;
+            m_OnEndDrag?.RemoveHandler(handler);
         }
 
-        private event Action<PointerEventData> m_OnClick;
-        private event Action<PointerEventData> m_OnUp;
-        private event Action<PointerEventData> m_OnDown;
-        private event Action<PointerEventData> m_OnEnter;
-        private event Action<PointerEventData> m_OnExit;
-        private event Action<PointerEventData> m_OnDrag;
-        private event Action<PointerEventData> m_OnBeginDrag;
-        private event Action<PointerEventData> m_OnEndDrag;
+        private void Trigger(Event e, PointerEventData data, UIEventType type)
+        {
+            if (e == null)
+            {
+                return;
+            }
+
+            e.Trigger(data);
+            OnUIEvent?.Invoke(gameObject, type, e.DisplayKey);
+        }
+
+        private Event m_OnClick;
+        private Event m_OnUp;
+        private Event m_OnDown;
+        private Event m_OnEnter;
+        private Event m_OnExit;
+        private Event m_OnDrag;
+        private Event m_OnBeginDrag;
+        private Event m_OnEndDrag;
+
+        private class Event
+        {
+            public int DisplayKey => m_DisplayKey;
+
+            public Event(int displayKey)
+            {
+                m_DisplayKey = displayKey;
+            }
+
+            public void AddHandler(UnityAction<PointerEventData> handler)
+            {
+                m_EventHandler ??= new();
+                m_EventHandler.AddListener(handler);
+            }
+
+            public void RemoveHandler(UnityAction<PointerEventData> handler)
+            {
+                m_EventHandler?.RemoveListener(handler);
+            }
+
+            public void Trigger(PointerEventData data)
+            {
+                m_EventHandler?.Invoke(data);
+            }
+
+            private UnityEvent<PointerEventData> m_EventHandler;
+            private readonly int m_DisplayKey;
+        }
     }
 }

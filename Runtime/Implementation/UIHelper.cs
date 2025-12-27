@@ -21,6 +21,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System;
+using System.Text;
 using UnityEngine;
 
 namespace XDay.GUIAPI
@@ -113,6 +115,37 @@ namespace XDay.GUIAPI
             var screenPos = RectTransformUtility.WorldToScreenPoint(camera, worldPos);
             RectTransformUtility.ScreenPointToWorldPointInRectangle(canvas.transform as RectTransform, screenPos, null, out var canvasPos);
             return canvasPos;
+        }
+
+        public static string FormatTimeNow()
+        {
+            var now = DateTime.Now;
+            var hourStr = now.Hour.ToString("D2");
+            var minuteStr = now.Minute.ToString("D2");
+            return $"{hourStr}:{minuteStr}";
+        }
+
+        public static string FormatTime(this TimeSpan time)
+        {
+            var sb = new StringBuilder(128);
+            if (time.Days > 0)
+            {
+                sb.AppendFormat("", time.Days);
+                sb.AppendFormat("{0:D2}:", time.Hours);
+            }
+            else if (time.Hours > 0)
+            {
+                sb.AppendFormat("{0:D2}:", time.Hours);
+            }
+
+            var seconds = Mathf.CeilToInt(time.Seconds + time.Milliseconds / 1000.0f);
+            if (seconds >= 60)
+            {
+                seconds = 59;
+            }
+
+            sb.AppendFormat("{0:D2}:{1:D2}", time.Minutes, seconds);
+            return sb.ToString();
         }
     }
 }

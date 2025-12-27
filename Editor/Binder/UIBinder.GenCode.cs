@@ -267,7 +267,7 @@ $NAMESPACE_END$
                         builder.AppendLine($"var gameObject{index} = QueryGameObject(\"{path}\");");
                         builder.AppendLine($"var gameObject{index}Listener = gameObject{index}.AddComponent<UIEventListener>();");
                     }
-                    builder.AppendLine($"gameObject{index}Listener.Add{eventData.Type}Event({eventData.HandlerName});");
+                    builder.AppendLine($"gameObject{index}Listener.Add{eventData.Type}Event({eventData.HandlerName}, {eventData.DisplayKeyID});");
                 }
 
                 if (gameObjectMetadata.Events.Count > 0)

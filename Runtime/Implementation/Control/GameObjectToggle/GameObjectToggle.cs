@@ -70,7 +70,7 @@ namespace XDay.GUIAPI
         }
 
         [SerializeField]
-        private List<ToggleItem> m_Items;
+        private List<ToggleItem> m_Items = new();
         [HideInInspector]
         [SerializeField]
         private int m_ActiveIndex = 0;

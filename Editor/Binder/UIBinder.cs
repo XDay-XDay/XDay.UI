@@ -24,6 +24,7 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using XDay.DisplayKeyAPI.Editor;
 using XDay.UtilityAPI;
 
 namespace XDay.GUIAPI.Editor
@@ -65,6 +66,8 @@ namespace XDay.GUIAPI.Editor
             SetActiveMetadata();
             OnSelectionChanged();
             RemoveInvalidateData();
+
+            m_DisplayKeyEditor.Load();
         }
 
         private void OnDestroy()
@@ -210,6 +213,8 @@ namespace XDay.GUIAPI.Editor
                 return;
             }
 
+            UpdateDisplayKeyNames();
+
             m_ScrollPos = EditorGUILayout.BeginScrollView(m_ScrollPos);
             EditorGUI.BeginChangeCheck();
 
@@ -318,7 +323,7 @@ namespace XDay.GUIAPI.Editor
             EditorGUILayout.EndHorizontal();
             EditorGUI.indentLevel++;
             metadata.HandlerName = EditorGUILayout.TextField("Name", metadata.HandlerName);
-            metadata.DisplayKeyID = EditorGUILayout.IntField("DisplayKeyID", metadata.DisplayKeyID);
+            metadata.DisplayKeyID = DrawDisplayKey("Display Key", metadata.DisplayKeyID);
             EditorGUI.indentLevel--;
             return deleted;
         }
@@ -546,6 +551,48 @@ namespace XDay.GUIAPI.Editor
             }
         }
 
+        public int DrawDisplayKey(string name, int displayKeyID)
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            displayKeyID = EditorGUILayout.IntField(name, displayKeyID);
+
+            var idx = EditorGUILayout.Popup(GUIContent.none, m_DisplayKeyEditor.DisplayKeyManager.GetIndex(displayKeyID) + 1, m_DisplayKeyNames);
+            var key = m_DisplayKeyEditor.DisplayKeyManager.GetKeyByIndex(idx - 1);
+            if (key != null)
+            {
+                displayKeyID = key.ID;
+            }
+            else
+            {
+                displayKeyID = 0;
+            }
+
+            EditorGUILayout.Toggle(GUIContent.none, m_DisplayKeyEditor.DisplayKeyManager.IsValidKey(displayKeyID));
+            EditorGUILayout.EndHorizontal();
+            return displayKeyID;
+        }
+
+        private void UpdateDisplayKeyNames()
+        {
+            var n = m_DisplayKeyEditor.DisplayKeyManager.AllKeys.Count;
+            if (m_DisplayKeyNames == null ||
+                m_DisplayKeyNames.Length != n + 1)
+            {
+                m_DisplayKeyNames = new string[n + 1];
+            }
+            m_DisplayKeyNames[0] = "None";
+            var idx = 1;
+            foreach (var group in m_DisplayKeyEditor.DisplayKeyManager.Groups)
+            {
+                foreach (var key in group.Keys)
+                {
+                    m_DisplayKeyNames[idx] = $"{group.Name}/{key.Name}";
+                    ++idx;
+                }
+            }
+        }
+
         private UIBinderConfig m_Config;
         private UIMetadata m_Metadata;
         private UIMetadataManager m_MetadataManager;
@@ -555,5 +602,7 @@ namespace XDay.GUIAPI.Editor
         private UIEventType m_SelectedEventType = UIEventType.Click;
         private GameObject m_EditingPrefab;
         private Vector2 m_ScrollPos;
+        private readonly DisplayKeyEditor m_DisplayKeyEditor = new();
+        private string[] m_DisplayKeyNames;
     }
 }

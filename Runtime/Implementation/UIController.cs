@@ -77,6 +77,11 @@ namespace XDay.GUIAPI
             return m_Data;
         }
 
+        public T Data<T>() where T : class
+        {
+            return m_Data as T;
+        }
+
         public override void Refresh()
         {
             if (m_View.IsLoaded)
