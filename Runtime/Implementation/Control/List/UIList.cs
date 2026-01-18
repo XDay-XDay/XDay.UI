@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 XDay
+ * Copyright (c) 2024-2026 XDay
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -28,7 +28,7 @@ using UnityEngine;
 namespace XDay.GUIAPI
 {
     /// <summary>
-    /// 需要借助Layout组件自动排列List元素
+    /// 需要借助Layout组件自动排列List元素，挂到Content节点
     /// </summary>
     [AddComponentMenu("XDay/UI/XDay List", 0)]
     public class UIList : MonoBehaviour
@@ -37,9 +37,9 @@ namespace XDay.GUIAPI
 
         private void Awake()
         {
-            if (m_ListItemPrefab != null)
+            if (ListItemPrefab != null)
             {
-                m_ListItemPrefab.SetActive(false);
+                ListItemPrefab.SetActive(false);
             }
         }
 
@@ -52,6 +52,9 @@ namespace XDay.GUIAPI
             where View : UIView
             where Controller : UIControllerBase
         {
+            //todo reuse view
+            Clear();
+
             m_DataList = new(datas);
             m_ViewType = typeof(View);
             m_ControllerType = typeof(Controller);
@@ -72,15 +75,15 @@ namespace XDay.GUIAPI
                 itemView.OnDestroy();
             }
             m_ItemViews.Clear();
-            m_DataList.Clear();
+            m_DataList?.Clear();
             m_ViewType = null;
             m_ControllerType = null;
         }
 
         protected UIView CreateItemView(Type viewType, Type controllerType, int idx, Transform parent)
         {
-            GameObject root = UnityEngine.Object.Instantiate(m_ListItemPrefab);
-            root.name = m_ListItemPrefab.name + $"_{idx}";
+            GameObject root = UnityEngine.Object.Instantiate(ListItemPrefab);
+            root.name = ListItemPrefab.name + $"_{idx}";
             var itemView = Activator.CreateInstance(viewType, new object[] { root }) as UIView;
             var itemController = Activator.CreateInstance(controllerType, itemView) as UIControllerBase;
             itemView.SetController(itemController);
@@ -102,12 +105,8 @@ namespace XDay.GUIAPI
         }
 
         protected readonly List<UIView> m_ItemViews = new();
-
         protected List<object> m_DataList;
-
         protected Type m_ViewType;
         protected Type m_ControllerType;
-
-        private GameObject m_ListItemPrefab;
     }
 }

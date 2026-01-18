@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 XDay
+ * Copyright (c) 2024-2026 XDay
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -69,17 +69,18 @@ namespace XDay.GUIAPI
 
         public static TextureFormat GetTextureFormat()
         {
-#if UNITY_EDITOR
-            var target = UnityEditor.EditorUserBuildSettings.activeBuildTarget;
-            if (target == UnityEditor.BuildTarget.Android ||
-                target == UnityEditor.BuildTarget.iOS)
+#if ENABLE_TUANJIE
+            if (Application.platform == RuntimePlatform.OpenHarmony)
+            {
+                return TextureFormat.ETC2_RGBA8;
+            }
+#endif
+            if (Application.platform == RuntimePlatform.Android ||
+                Application.platform == RuntimePlatform.IPhonePlayer)
             {
                 return TextureFormat.ASTC_6x6;
             }
             return TextureFormat.DXT5;
-#else
-            return TextureFormat.ASTC_6x6;
-#endif
         }
 
         public static int GetAlignment()

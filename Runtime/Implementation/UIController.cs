@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 XDay
+ * Copyright (c) 2024-2026 XDay
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -23,6 +23,8 @@
 
 
 
+using Cysharp.Threading.Tasks;
+
 namespace XDay.GUIAPI
 {
     public abstract class UIControllerBase
@@ -35,6 +37,7 @@ namespace XDay.GUIAPI
         public abstract void Hide();
         public abstract void Update(float dt);
         public abstract void Refresh();
+        public abstract void RequestRefresh();
     }
 
     public class UIController<View> : UIControllerBase where View : UIView
@@ -94,6 +97,11 @@ namespace XDay.GUIAPI
         public override void Update(float dt)
         {
             OnUpdate(dt);
+        }
+
+        public override void RequestRefresh()
+        {
+            UniTask.DelayFrame(1).ContinueWith(Refresh).Forget();
         }
 
         protected virtual void OnRefresh() { }

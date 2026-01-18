@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 XDay
+ * Copyright (c) 2024-2026 XDay
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -24,6 +24,7 @@
 using System;
 using System.Text;
 using UnityEngine;
+using XDay.UtilityAPI.Math;
 
 namespace XDay.GUIAPI
 {
@@ -49,11 +50,11 @@ namespace XDay.GUIAPI
         /// <param name="sceneCamera"></param>
         /// <param name="uiCamera"></param>
         /// <param name="coverUI"></param>
-        public static void CoverWorldPlane(Camera sceneCamera, 
-            Camera uiCamera, 
-            RectTransform coverUI, 
-            Vector3 worldMin, 
-            Vector3 worldMax, 
+        public static void CoverWorldPlane(Camera sceneCamera,
+            Camera uiCamera,
+            RectTransform coverUI,
+            Vector3 worldMin,
+            Vector3 worldMax,
             float worldZ)
         {
             if (coverUI != null)
@@ -115,6 +116,26 @@ namespace XDay.GUIAPI
             var screenPos = RectTransformUtility.WorldToScreenPoint(camera, worldPos);
             RectTransformUtility.ScreenPointToWorldPointInRectangle(canvas.transform as RectTransform, screenPos, null, out var canvasPos);
             return canvasPos;
+        }
+
+        /// <summary>
+        /// 将rect transform的rect转换到屏幕空间
+        /// </summary>
+        /// <param name="transform"></param>
+        /// <param name="camera"></param>
+        /// <returns></returns>
+        public static Rect LocalToUIWorldRect(RectTransform transform, Camera camera)
+        {
+            Vector3[] worldCorners = new Vector3[4];
+            transform.GetWorldCorners(worldCorners);
+
+            FloatBounds2D bounds = new();
+            for (var i = 0; i < worldCorners.Length; ++i)
+            {
+                var screenPoint = RectTransformUtility.WorldToScreenPoint(camera, worldCorners[i]);
+                bounds.AddPoint(screenPoint.x, screenPoint.y);
+            }
+            return new Rect(bounds.Min, bounds.Size);
         }
 
         public static string FormatTimeNow()
