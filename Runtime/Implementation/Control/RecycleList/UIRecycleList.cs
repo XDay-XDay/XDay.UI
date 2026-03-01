@@ -37,21 +37,27 @@ namespace XDay.GUIAPI
     /// 可重复使用item的滚动列表,挂在ScrollRect上
     /// TODO:
     ///     1.优化滚动时视野检查
-    ///     2.自动计算Padding排版
     /// </summary>
     [AddComponentMenu("XDay/UI/XDay Recycle List", 0)]
+    [ExecuteInEditMode]
     public class UIRecycleList : MonoBehaviour
     {
+        [Header("Item")]
         public GameObject ListItemPrefab;
+        [Header("Padding")]
         public float LeftPadding;
         public float RightPadding;
         public float TopPadding;
         public float BottomPadding;
+        [Tooltip("自动计算Padding,Vertical时自动计算Left/Right Padding, Horizontal时自动计算Top/Bottom Padding")]
+        public bool AutoCalculate = true;
+        [Header("Spacing")]
         public Vector2 Spacing;
+        [Header("Direction")]
         public ListDirection Direction = ListDirection.Vertical;
         public int GlobalPointer => m_LayoutBuilder.GlobalPointer;
 
-        private void Awake()
+        private void Init()
         {
             var scrollRect = GetComponent<ScrollRect>();
             if (Direction == ListDirection.Vertical)
@@ -66,30 +72,52 @@ namespace XDay.GUIAPI
                 scrollRect.horizontal = true;
                 scrollRect.vertical = false;
             }
-            m_LayoutBuilder.Init(scrollRect, ListItemPrefab, LeftPadding, RightPadding, TopPadding, BottomPadding, Spacing);
+            m_LayoutBuilder.Init(scrollRect, ListItemPrefab, LeftPadding, RightPadding, TopPadding, BottomPadding, Spacing, AutoCalculate);
         }
 
         private void OnDestroy()
         {
-            m_LayoutBuilder.OnDestroy();
+            m_LayoutBuilder?.OnDestroy();
         }
 
         public void SetData<View, Controller>(List<object> data)
             where View : UIView
             where Controller : UIControllerBase
         {
+            if (m_LayoutBuilder == null)
+            {
+                Init();
+            }
+
             m_LayoutBuilder.SetData<View, Controller>(data);
         }
 
         public void SetScroll(Vector2 normalizedPosition)
         {
-            m_LayoutBuilder.SetScroll(normalizedPosition);
+            m_LayoutBuilder?.SetScroll(normalizedPosition);
         }
 
         public void MoveScroll(Vector2 normalizedPosition)
         {
-            m_LayoutBuilder.MoveScroll(normalizedPosition);
+            m_LayoutBuilder?.MoveScroll(normalizedPosition);
         }
+
+#if UNITY_EDITOR
+        private void Update()
+        {
+            if (Application.isEditor && !Application.isPlaying && ListItemPrefab != null)
+            {
+                //假设item的anchor必须是center,pivot是0.5,0.5
+                var transform = ListItemPrefab.transform as RectTransform;
+                var itemWidth = transform.rect.width;
+                var itemHeight = transform.rect.height;
+                var contentTransform = transform.parent as RectTransform;
+                var contentWidth = contentTransform.rect.width;
+                var deltaX = (contentWidth - itemWidth) * 0.5f;
+                transform.anchoredPosition = new Vector2(LeftPadding - deltaX, TopPadding - itemHeight * 0.5f);
+            }
+        }
+#endif
 
         private RecycleListLayoutBuilder m_LayoutBuilder;
     }

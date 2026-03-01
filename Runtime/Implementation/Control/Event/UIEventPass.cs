@@ -37,6 +37,7 @@ namespace XDay.GUIAPI
         IPointerUpHandler,
         IBeginDragHandler
     {
+        [Tooltip("设置为ScrollView的GameObject")]
         public GameObject LastDragObject;
         public float ClickMinDistanceSqr = 5 * 5;
 

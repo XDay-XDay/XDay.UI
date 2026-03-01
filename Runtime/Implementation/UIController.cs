@@ -21,12 +21,24 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
-
 using Cysharp.Threading.Tasks;
+using System;
 
 namespace XDay.GUIAPI
 {
+    [AttributeUsage(AttributeTargets.Class)]
+    public class ControllerImplTypeAttribute : System.Attribute
+    {
+        public Type ImplType => m_ImplType;
+
+        public ControllerImplTypeAttribute(Type implType)
+        {
+            m_ImplType = implType;
+        }
+
+        private readonly Type m_ImplType;
+    }
+
     public abstract class UIControllerBase
     {
         public abstract void SetData(object data);

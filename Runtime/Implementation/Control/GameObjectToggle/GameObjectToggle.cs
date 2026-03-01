@@ -27,10 +27,17 @@ namespace XDay.GUIAPI
 
         public void SetActiveIndex(int index)
         {
-            if (m_ActiveIndex != index)
+            if (index < 0)
             {
-                m_ActiveIndex = index;
-                Apply();
+                HideAll();
+            }
+            else
+            {
+                if (m_ActiveIndex != index)
+                {
+                    m_ActiveIndex = index;
+                    Apply();
+                }
             }
         }
 
@@ -45,7 +52,29 @@ namespace XDay.GUIAPI
                 }
             }
 
-            Debug.LogError($"Toggle item not found: {name}");
+            if (!string.IsNullOrEmpty(name))
+            {
+                Debug.LogError($"Toggle item not found: {name}");
+            }
+            else
+            {
+                //全部隐藏
+                HideAll();
+            }
+        }
+
+        private void HideAll()
+        {
+            for (var i = 0; i < m_Items.Count; ++i)
+            {
+                foreach (var obj in m_Items[i].GameObjects)
+                {
+                    if (obj != null)
+                    {
+                        obj.SetActive(false);
+                    }
+                }
+            }
         }
 
         private void Apply()
@@ -56,14 +85,20 @@ namespace XDay.GUIAPI
                 {
                     foreach (var obj in m_Items[i].GameObjects)
                     {
-                        obj.SetActive(true);
+                        if (obj != null)
+                        {
+                            obj.SetActive(true);
+                        }
                     }
                 }
                 else
                 {
                     foreach (var obj in m_Items[i].GameObjects)
                     {
-                        obj.SetActive(false);
+                        if (obj != null)
+                        {
+                            obj.SetActive(false);
+                        }
                     }
                 }
             }

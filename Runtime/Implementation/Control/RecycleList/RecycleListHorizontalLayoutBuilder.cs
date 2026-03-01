@@ -29,10 +29,17 @@ namespace XDay.GUIAPI
     {
         public override int GlobalPointer => m_GlobalPointer;
 
-        protected override void OnInit(Vector2 itemSizeWithSpacing, float validWidth, float validHeight)
+        protected override void OnInit(Vector2 itemSizeWithSpacing, float validWidth, float validHeight, bool autoCalculate)
         {
             m_HorizontalDisplayItemCount = Mathf.CeilToInt(validWidth / itemSizeWithSpacing.x) + 2;
             m_VerticalDisplayItemCount = Mathf.FloorToInt(validHeight / itemSizeWithSpacing.y);
+
+            if (autoCalculate)
+            {
+                var leftHeight = m_ViewportRect.size.y - (m_VerticalDisplayItemCount * m_ItemSizeWithSpacing.y - m_Spacing.y);
+                m_TopPadding = leftHeight / 2;
+                m_BottomPadding = leftHeight / 2;
+            }
         }
 
         protected override void OnSetData()

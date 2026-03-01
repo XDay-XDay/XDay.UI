@@ -48,8 +48,9 @@ namespace XDay.GUIAPI.Editor
 
             string viewContent = GenerateView();
             string controllerContent = GenerateController();
+            string controllerImpl = GenerateControllerImpl();
 
-            File.WriteAllText(fileName, viewContent + controllerContent);
+            File.WriteAllText(fileName, viewContent + controllerImpl + controllerContent);
             AssetDatabase.Refresh();
 
             SerializationHelper.FormatCode(fileName);
@@ -72,7 +73,7 @@ $NAMESPACE_BEGIN$
 
     $EVENT_HANDLER_INTERFACE$
 
-    internal class $CLASS_NAME$ : UIView
+    public class $CLASS_NAME$ : UIView
     {
         $PROPERTY$
 
@@ -151,17 +152,145 @@ $NAMESPACE_BEGIN$
             string template =
 @"
 
-    internal partial class $CONTROLLER_CLASS_NAME$ : UIController<$VIEW_CLASS_NAME$> $EVENT_HANDLER_INTERFACE$
+    public class $CONTROLLER_CLASS_NAME$ : UIController<$VIEW_CLASS_NAME$> $EVENT_HANDLER_INTERFACE$
     {
         public $CONTROLLER_CLASS_NAME$($VIEW_CLASS_NAME$ view) : base(view)
         {
+            var type = UIWindowManager.Instance.GetImplType(""$CONTROLLER_CLASS_NAME$Impl"");
+            m_Impl = System.Activator.CreateInstance(type) as $CONTROLLER_CLASS_NAME$ImplBase;
+            m_Impl.Init(view, this);
         }
+
+        public override void OnDestroy()
+        {
+            m_Impl.Destroy();
+            m_Impl = null;
+        }
+
+        protected override void OnRefresh()
+        {
+            m_Impl.Refresh();
+        }
+
+        protected override void OnLoad()
+        {
+            m_Impl.Load();
+        }
+
+        protected override void OnShow()
+        {
+            m_Impl.Show();
+        }
+
+        protected override void OnHide()
+        {
+            m_Impl.Hide();
+        }
+
+        protected override void OnUpdate(float dt)
+        {
+            m_Impl.Update(dt);
+        }
+
+        $CONTROLLER_EVENT_IMPL$
+
+        private $CONTROLLER_CLASS_NAME$ImplBase m_Impl;
     }
 $NAMESPACE_END$
 ";
             template = template.Replace("$CONTROLLER_CLASS_NAME$", m_Metadata.ControllerClassName);
             template = template.Replace("$VIEW_CLASS_NAME$", m_Metadata.ViewClassName);
             template = template.Replace("$EVENT_HANDLER_INTERFACE$", GenerateControllerEventHandlerInterface());
+            template = template.Replace("$CONTROLLER_EVENT_IMPL$", GenerateControllerEventHandler());
+            if (!string.IsNullOrEmpty(m_Metadata.Namespace))
+            {
+                template = template.Replace("$NAMESPACE_END$", "}");
+            }
+            else
+            {
+                template = template.Replace("$NAMESPACE_END$", "");
+            }
+            return template;
+        }
+
+        private string GenerateControllerImpl()
+        {
+            string template =
+            @"
+
+    public abstract class $CONTROLLER_CLASS_NAME$ImplBase
+    {
+        internal void Init($VIEW_CLASS_NAME$ view, $CONTROLLER_CLASS_NAME$ controller)
+        {
+            m_View = view;
+            m_Controller = controller;
+        }
+
+        public void Destroy()
+        {
+            OnDestroy();
+
+            m_View = null;
+            m_Controller = null;
+        }
+
+        public void Refresh()
+        {
+            OnRefresh();
+        }
+
+        public void Load()
+        {
+            OnLoad();
+        }
+
+        public void Show()
+        {
+            OnShow();
+        }
+
+        public void Hide()
+        {
+            OnHide();
+        }
+
+        public void Update(float dt)
+        {
+            OnUpdate(dt);
+        }
+
+        public void RequestRefresh()
+        {
+            m_Controller.RequestRefresh();
+        }
+
+        public void SetData(object data)
+        {
+            m_Controller.SetData(data);
+        }
+
+$EVENT_HANDLER_IMPL$
+
+        protected virtual void OnDestroy() { }
+        protected virtual void OnRefresh() { }
+        protected virtual void OnLoad() { }
+        protected virtual void OnShow() { }
+        protected virtual void OnHide() { }
+        protected virtual void OnUpdate(float dt) { }
+
+        protected T GetData<T>() where T : class
+        {
+            return m_Controller.GetData() as T;
+        }
+
+        protected $VIEW_CLASS_NAME$ m_View;
+        private $CONTROLLER_CLASS_NAME$ m_Controller;
+    }
+
+";
+            template = template.Replace("$CONTROLLER_CLASS_NAME$", m_Metadata.ControllerClassName);
+            template = template.Replace("$VIEW_CLASS_NAME$", m_Metadata.ViewClassName);
+            template = template.Replace("$EVENT_HANDLER_IMPL$", GenerateEventHandlerImpl());
             if (!string.IsNullOrEmpty(m_Metadata.Namespace))
             {
                 template = template.Replace("$NAMESPACE_END$", "}");
@@ -391,7 +520,7 @@ $NAMESPACE_END$
             {
                 string template =
 @"
-public interface I$CLASS_NAME$EventHandler
+internal interface I$CLASS_NAME$EventHandler
 {
     $FUNC$
 }
@@ -402,6 +531,20 @@ public interface I$CLASS_NAME$EventHandler
             }
 
             return "";
+        }
+
+        private string GenerateEventHandlerImpl()
+        {
+            StringBuilder builder = new();
+            foreach (var gameObjectMetadata in m_Metadata.GameObjects)
+            {
+                foreach (var e in gameObjectMetadata.Events)
+                {
+                    builder.AppendLine($"public abstract void {e.HandlerName}(PointerEventData pointerData);");
+                }
+            }
+
+            return builder.ToString();
         }
 
         private string GenerateControllerEventHandlerInterface()
@@ -456,12 +599,13 @@ private void $HANDLER_NAME$(PointerEventData pointerData)
                 {
                     string template =
 @"
-public void $HANDLER_NAME$(PointerEventData pointerData)
+void I$VIEW_CLASS_NAME$EventHandler.$HANDLER_NAME$(PointerEventData pointerData)
 {
-    //custom handler code here
+    m_Impl.$HANDLER_NAME$(pointerData);
 }
 ";
                     template = template.Replace("$HANDLER_NAME$", e.HandlerName);
+                    template = template.Replace("$VIEW_CLASS_NAME$", m_Metadata.ViewClassName);
                     builder.AppendLine(template);
                 }
             }

@@ -148,7 +148,6 @@ namespace XDay.GUIAPI
             }
         }
 
-        private bool m_Grey = false;
         private DynamicAtlas m_Atlas;
         private Sprite m_AtlasSprite;
         private Sprite m_LastSprite;

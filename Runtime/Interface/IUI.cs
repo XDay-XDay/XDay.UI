@@ -35,6 +35,13 @@ namespace XDay.GUIAPI
         Layer4,
     }
 
+    public interface IUIElementVisibilityChecker
+    {
+        string ConditionKey { get; }
+
+        bool IsVisible();
+    }
+
     public interface IUIWindowManager
     {
         static IUIWindowManager Create(IWorldAssetLoader loader, GameObject windowRoot)
@@ -55,5 +62,11 @@ namespace XDay.GUIAPI
         void Close<T>() where T : UIWindowBase, new();
         void Close(UIWindowBase window);
         void Update(float dt);
+
+        void RegisterElementVisibilityChecker(IUIElementVisibilityChecker checker);
+        void AddElementVisibilityCondition(GameObject go, string conditionKey);
+        void RefreshElementVisibility();
+        void RefreshOneElementVisibility(GameObject go);
+        void RemoveElementVisibilityCondition(GameObject go, string conditionKey);
     }
 }

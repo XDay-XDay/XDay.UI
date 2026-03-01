@@ -21,14 +21,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using XDay.UtilityAPI;
 using XDay.WorldAPI;
 
 namespace XDay.GUIAPI
 {
-    internal class UIWindowManager : IUIWindowManager
+    public class UIWindowManager : IUIWindowManager
     {
         public static UIWindowManager Instance => m_Instance;
         public IWorldAssetLoader AssetLoader => m_Loader;
@@ -42,6 +44,8 @@ namespace XDay.GUIAPI
             m_Instance = this;
             m_Loader = loader;
             m_UIRoot = windowRoot;
+
+            RegisterImplTypes();
         }
 
         public void OnDestroy()
@@ -165,6 +169,37 @@ namespace XDay.GUIAPI
             return GetActive<T>() != null;
         }
 
+        public void RegisterElementVisibilityChecker(IUIElementVisibilityChecker checker)
+        {
+            m_ElementVisibilityManager.Register(checker);
+        }
+
+        public void AddElementVisibilityCondition(GameObject go, string conditionKey)
+        {
+            m_ElementVisibilityManager.AddGameObjectCondition(go, conditionKey);
+        }
+
+        public void RemoveElementVisibilityCondition(GameObject go, string conditionKey)
+        {
+            m_ElementVisibilityManager.RemoveGameObjectCondition(go, conditionKey);
+        }
+
+        public void RefreshElementVisibility()
+        {
+            m_ElementVisibilityManager.Refresh();
+        }
+
+        public void RefreshOneElementVisibility(GameObject go)
+        {
+            m_ElementVisibilityManager.RefreshOne(go);
+        }
+
+        public Type GetImplType(string implTypeName)
+        {
+            m_ImplTypes.TryGetValue(implTypeName, out var type);
+            return type;
+        }
+
         private T GetCache<T>() where T : UIWindowBase, new()
         {
             foreach (var window in m_CachedWindows)
@@ -177,11 +212,23 @@ namespace XDay.GUIAPI
             return null;
         }
 
+        private void RegisterImplTypes()
+        {
+            var implTypes = Helper.GetClassesWithAttribute<ControllerImplTypeAttribute>();
+            foreach (var type in implTypes)
+            {
+                var attribute = type.GetCustomAttribute<ControllerImplTypeAttribute>();
+                m_ImplTypes.Add(attribute.ImplType.Name, type);
+            }
+        }
+
         private readonly IWorldAssetLoader m_Loader;
         private readonly List<UIWindowBase> m_ActiveWindows = new();
         private readonly List<UIWindowBase> m_UpdatableActiveWindows = new();
         private readonly List<UIWindowBase> m_CachedWindows = new();
         private readonly GameObject m_UIRoot;
+        private readonly UIElementVisibilityManager m_ElementVisibilityManager = new();
         private static UIWindowManager m_Instance;
+        private Dictionary<string, Type> m_ImplTypes = new();
     }
 }

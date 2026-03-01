@@ -38,7 +38,7 @@ namespace XDay.GUIAPI
             float leftPadding,
             float rightPadding,
             float topPadding,
-            float bottomPadding, Vector2 spacing)
+            float bottomPadding, Vector2 spacing, bool autoCalculate)
         {
             m_LeftPadding = leftPadding;
             m_RightPadding = rightPadding;
@@ -59,7 +59,7 @@ namespace XDay.GUIAPI
             float validWidth = m_ViewportRect.size.x - m_LeftPadding - m_RightPadding;
             float validHeight = m_ViewportRect.size.y - m_TopPadding - m_BottomPadding;
 
-            OnInit(m_ItemSizeWithSpacing, validWidth, validHeight);
+            OnInit(m_ItemSizeWithSpacing, validWidth, validHeight, autoCalculate);
         }
 
         public void OnDestroy()
@@ -107,7 +107,7 @@ namespace XDay.GUIAPI
             m_ScrollRect.normalizedPosition += normalizedPosition;
         }
 
-        protected abstract void OnInit(Vector2 itemSizeWithSpacing, float validWidth, float validHeight);
+        protected abstract void OnInit(Vector2 itemSizeWithSpacing, float validWidth, float validHeight, bool autoCalculate);
         protected abstract void OnScrollValueChanged(Vector2 pos);
         protected abstract void OnSetData();
 
@@ -159,8 +159,8 @@ namespace XDay.GUIAPI
 
         protected void SetTopLeftPosition(UIView item, int x, int y)
         {
-            var topLeftPos = GetItemPosition(x, y);
             m_ItemCoordinates[item] = new Vector2Int(x, y);
+            var topLeftPos = GetItemPosition(x, y);
             (item.Root.transform as RectTransform).anchoredPosition = ToAnchorPosition(topLeftPos);
         }
 
@@ -174,7 +174,8 @@ namespace XDay.GUIAPI
 
         private Vector2 ToContentPosition(Vector2 pos)
         {
-            return new Vector2(pos.x - m_ContentRect.width * 0.5f, m_ContentRect.height - pos.y - m_ContentRect.height * 0.5f);
+            return new Vector2(pos.x - m_ContentRect.width * 0.5f,
+                (m_ContentRect.height + pos.y) - m_ContentRect.height * 0.5f);
         }
 
         private Vector2 GetItemSize(Vector3 scale)
@@ -192,7 +193,7 @@ namespace XDay.GUIAPI
         private Vector2 GetItemPosition(int x, int y)
         {
             var posX = m_LeftPadding + (m_ItemSize.x + m_Spacing.x) * x;
-            var posY = m_TopPadding + (m_ItemSize.y + m_Spacing.y) * y;
+            var posY = m_TopPadding - (m_ItemSize.y + m_Spacing.y) * y;
             return new Vector2(posX, posY);
         }
 
